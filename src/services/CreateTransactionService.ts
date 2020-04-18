@@ -1,6 +1,5 @@
-import { getCustomRepository } from 'typeorm';
+import { getRepository, getCustomRepository } from 'typeorm';
 
-import TransactionsRepository from '../repositories/TransactionsRepository';
 import CategoriesRepository from '../repositories/CategoriesRepository';
 import Transaction from '../models/Transaction';
 
@@ -19,10 +18,9 @@ class CreateTransactionService {
     categoryTitle,
   }: Request): Promise<Transaction> {
     const categoriesRepository = getCustomRepository(CategoriesRepository);
-    const transactionsRepository = getCustomRepository(TransactionsRepository);
-
     const category = await categoriesRepository.findOrCreate(categoryTitle);
 
+    const transactionsRepository = getRepository(Transaction);
     const transaction = transactionsRepository.create({
       title,
       value,
