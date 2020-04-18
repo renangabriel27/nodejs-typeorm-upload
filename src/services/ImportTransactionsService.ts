@@ -10,19 +10,17 @@ class ImportTransactionsService {
     const csvFilePath = path.join(uploadConfig.directory, filename);
     const createService = new CreateTransactionService();
 
-    const csvTransactions = await csv({ checkType: true }).fromFile(
-      csvFilePath,
-    );
+    const csvTransactions = await csv().fromFile(csvFilePath);
 
-    csvTransactions.forEach(item => {
-      const { title, type, value, category } = item;
-      createService.execute({
+    for (let index = 0; index < csvTransactions.length; index++) {
+      const { title, type, value, category } = csvTransactions[index];
+      await createService.execute({
         title,
         type,
         value,
         categoryTitle: category,
       });
-    });
+    }
 
     const csvFileExists = await fs.promises.stat(csvFilePath);
 
