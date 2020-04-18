@@ -3,12 +3,6 @@ import { getCustomRepository } from 'typeorm';
 import AppError from '../errors/AppError';
 import TransactionsRepository from '../repositories/TransactionsRepository';
 
-interface TokenPayload {
-  iat: number;
-  exp: number;
-  sub: string;
-}
-
 export default async function ensureOutcomeIsValid(
   request: Request,
   response: Response,

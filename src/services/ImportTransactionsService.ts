@@ -5,14 +5,8 @@ import uploadConfig from '../config/upload';
 import Transaction from '../models/Transaction';
 import CreateTransactionService from './CreateTransactionService';
 
-interface TransactionCSV {
-  title: string;
-  type: 'income' | 'outcome';
-  value: number;
-  category: string;
-}
 class ImportTransactionsService {
-  async execute(filename: string): Promise<any> {
+  async execute(filename: string): Promise<Transaction[]> {
     const csvFilePath = path.join(uploadConfig.directory, filename);
     const createService = new CreateTransactionService();
 
@@ -20,9 +14,9 @@ class ImportTransactionsService {
       csvFilePath,
     );
 
-    csvTransactions.map(async item => {
+    csvTransactions.forEach(item => {
       const { title, type, value, category } = item;
-      await createService.execute({
+      createService.execute({
         title,
         type,
         value,
